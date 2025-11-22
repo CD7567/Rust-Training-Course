@@ -9,9 +9,21 @@
 // can still be used.
 //
 // You can implement the function and use it right inside the `string_ownership` function.
-#[allow(dead_code)]
+
 pub fn string_ownership() {
-    !unimplemented!()
+    fn longest_owned(s1: String, s2: String) -> String {
+        if s1.len() > s2.len() { s1 } else { s2 }
+    }
+
+    let string1 = String::from("hello");
+    let string2 = String::from("world!");
+
+    let result = longest_owned(string1, string2);
+
+    println!("Longest string: {}", result);
+
+    // println!("string1: {}", string1); // ERROR: borrow of moved value
+    // println!("string2: {}", string2); // ERROR: borrow of moved value
 }
 
 // BORROWING
