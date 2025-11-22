@@ -53,9 +53,23 @@ pub fn simple_borrowing() {
 // to check that the string was borrowed, not moved.
 //
 // You can implement the function and use it right inside the `hard_borrowing` function.
-#[allow(dead_code)]
+
 pub fn hard_borrowing() {
-    !unimplemented!()
+    fn append_and_return_length(string: &mut String, suffix: &str) -> usize {
+        string.push_str(suffix);
+        string.len()
+    }
+
+    let mut text = String::from("hello");
+
+    let len1 = append_and_return_length(&mut text, " world");
+    println!("After first append: '{}', length: {}", text, len1);
+
+    let len2 = append_and_return_length(&mut text, "!");
+    println!("After second append: '{}', length: {}", text, len2);
+
+    let len3 = append_and_return_length(&mut text, " 🦀");
+    println!("After third append: '{}', length: {}", text, len3);
 }
 
 // SLICES
