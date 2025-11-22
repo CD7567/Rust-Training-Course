@@ -57,8 +57,15 @@ pub fn factorial(n: u32) -> u32 {
 // ----- 5 --------------------------------------
 // Write a program that prints whether a provided signed integer number is positive, negative, or
 // zero using `if` statement.
+
 pub fn sign_checker(number: i32) -> &'static str {
-    unimplemented!()
+    if number > 0 {
+        "positive"
+    } else if number < 0 {
+        "negative"
+    } else {
+        "zero"
+    }
 }
 
 // ----- 6 --------------------------------------
