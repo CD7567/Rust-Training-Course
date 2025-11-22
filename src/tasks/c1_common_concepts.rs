@@ -23,7 +23,15 @@ pub fn simple_mutability() {
 // them.
 #[allow(dead_code)]
 pub fn simple_data_types() {
-    unimplemented!()
+    let integer: i32 = -42;
+    let float: f64 = std::f64::consts::PI;
+    let boolean: bool = true;
+    let character: char = 'A';
+
+    println!("Integer: {}", integer);
+    println!("Float: {}", float);
+    println!("Boolean: {}", boolean);
+    println!("Character: {}", character);
 }
 
 // FUNCTIONS
