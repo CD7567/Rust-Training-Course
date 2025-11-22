@@ -35,9 +35,16 @@ pub fn string_ownership() {
 // show that it was not moved and still available.
 //
 // You can implement the function and use it right inside the `simple_borrowing` function.
-#[allow(dead_code)]
+
 pub fn simple_borrowing() {
-    !unimplemented!()
+    fn print_length(s: &str) {
+        println!("Length: {}", s.len());
+    }
+
+    let text = "rust is awesome!";
+    print_length(&text);
+
+    println!("Original string: {}", text);
 }
 
 // ----- 3 --------------------------------------
