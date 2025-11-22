@@ -40,7 +40,9 @@ pub fn simple_data_types() {
 // ----- 3 --------------------------------------
 // Write a function `square` that takes a `u32` integer and returns its square as `u32`.
 
-// IMPLEMENT HERE:
+pub fn square(num: u32) -> u32 {
+    num * num
+}
 
 // ----- 4 --------------------------------------
 // Write a recursive function `factorial` that computes the factorial of a number (n!) as `u32`.
