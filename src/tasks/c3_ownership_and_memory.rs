@@ -86,6 +86,13 @@ pub fn last_word(slice: &str) -> &str {
 // ----- 5 --------------------------------------
 // Write a function longest_word(sentence: &str) -> &str that returns the longest word in a
 // sentence (string slice). If several words have the same maximum length, return the last one.
+
 pub fn longest_word(sentence: &str) -> &str {
-    !unimplemented!()
+    sentence.split_whitespace().fold("", |longest, current| {
+        if current.len() >= longest.len() {
+            current
+        } else {
+            longest
+        }
+    })
 }
