@@ -9,7 +9,10 @@
 // it to 10, and prints both values.
 #[allow(dead_code)]
 pub fn simple_mutability() {
-    unimplemented!()
+    let mut number = 5;
+    println!("Initial value: {}", number);
+    number = 10;
+    println!("Changed value: {}", number);
 }
 
 // DATA TYPES
