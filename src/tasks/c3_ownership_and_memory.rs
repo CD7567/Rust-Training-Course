@@ -78,8 +78,9 @@ pub fn hard_borrowing() {
 // ----- 4 --------------------------------------
 // Write a function last_word(s: &str) -> &str that returns the last word from a string slice.
 // Assume words are separated by spaces.
+
 pub fn last_word(slice: &str) -> &str {
-    !unimplemented!()
+    slice.split_whitespace().last().unwrap_or("")
 }
 
 // ----- 5 --------------------------------------
