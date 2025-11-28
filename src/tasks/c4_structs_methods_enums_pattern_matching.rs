@@ -8,12 +8,20 @@
 // that returns a `Point` instance.
 
 // IMPLEMENT HERE:
+struct Point {
+    x: u32,
+    y: u32,
+}
+
+fn new_point(x: u32, y: u32) -> Point {
+    Point { x, y }
+}
 
 // uncomment once implemented
-// pub fn point_checker() {
-//     let point = new_point(3, 4);
-//     assert_eq!((3, 4), (point.x, point.y));
-// }
+pub fn point_checker() {
+    let point = new_point(3, 4);
+    assert_eq!((3, 4), (point.x, point.y));
+}
 
 // ----- 2 --------------------------------------
 // Define a struct `Rectangle` with width and height. Implement a function
