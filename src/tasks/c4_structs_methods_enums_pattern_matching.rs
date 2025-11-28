@@ -208,5 +208,17 @@ impl WeirdLengthMeasures {
 // - Otherwise the number itself.
 
 pub fn fizzbuzz(n: u32) -> Vec<String> {
-    !unimplemented!()
+    let mut result = Vec::new();
+
+    for i in 1..=n {
+        let s = match (i % 2 == 0, i % 3 == 0) {
+            (true, true) => "FizzBuzz".to_string(),
+            (true, false) => "Fizz".to_string(),
+            (false, true) => "Buzz".to_string(),
+            (false, false) => i.to_string(),
+        };
+        result.push(s);
+    }
+
+    result
 }
