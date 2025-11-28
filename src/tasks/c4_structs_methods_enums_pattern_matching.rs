@@ -143,6 +143,29 @@ impl TrafficLight {
 // dividing by zero (you can use `match` for convenience)
 
 // IMPLEMENT HERE:
+pub enum Operation {
+    Add(i32, i32),
+    Subtract(i32, i32),
+    Multiply(i32, i32),
+    Divide(i32, i32),
+}
+
+impl Operation {
+    pub fn apply(self) -> Option<i32> {
+        match self {
+            Operation::Add(a, b) => Some(a + b),
+            Operation::Subtract(a, b) => Some(a - b),
+            Operation::Multiply(a, b) => Some(a * b),
+            Operation::Divide(a, b) => {
+                if b == 0 {
+                    None
+                } else {
+                    Some(a / b)
+                }
+            },
+        }
+    }
+}
 
 // PATTERN MATCHING
 // ================================================================================================
