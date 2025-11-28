@@ -1,13 +1,13 @@
 // This chapter is dedicated to some collections: vectors, strings and hash maps
 
+use std::collections::{HashMap, HashSet};
+
 // VECTORS
 // ================================================================================================
 
 // ----- 1 --------------------------------------
 // Write a function `second_largest(vec: &[i32]) -> Option<i32>` that returns the second largest
 // element in the array. If the array has fewer than 2 elements, return `None`.
-
-use std::collections::HashSet;
 
 pub fn second_largest(vec: &[i32]) -> Option<i32> {
     if vec.len() < 2 {
@@ -144,5 +144,14 @@ pub fn unique_chars(s: &str) -> bool {
 // vector, return all of them.
 
 pub fn top_k_frequent(nums: Vec<i32>, k: usize) -> Vec<i32> {
-    !unimplemented!()
+    let mut frequency = HashMap::new();
+    for &num in &nums {
+        *frequency.entry(num).or_insert(0) += 1;
+    }
+
+    let mut freq_vec: Vec<(i32, i32)> = frequency.into_iter().collect();
+
+    freq_vec.sort_by(|a, b| b.1.cmp(&a.1).then(b.0.cmp(&a.0)));
+
+    freq_vec.into_iter().take(k).map(|(num, _)| num).collect()
 }
