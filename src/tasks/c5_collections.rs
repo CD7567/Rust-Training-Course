@@ -7,6 +7,8 @@
 // Write a function `second_largest(vec: &[i32]) -> Option<i32>` that returns the second largest
 // element in the array. If the array has fewer than 2 elements, return `None`.
 
+use std::collections::HashSet;
+
 pub fn second_largest(vec: &[i32]) -> Option<i32> {
     if vec.len() < 2 {
         return None;
@@ -129,7 +131,8 @@ pub fn normalize_and_capitalize(sentence: &str) -> String {
 // characters (ignoring case), and false otherwise.
 
 pub fn unique_chars(s: &str) -> bool {
-    !unimplemented!()
+    let hash_set: HashSet<char> = s.chars().map(|c| c.to_lowercase().next().unwrap()).collect();
+    hash_set.len() == s.len()
 }
 
 // HASH MAP
