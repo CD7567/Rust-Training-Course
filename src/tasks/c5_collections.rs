@@ -1,7 +1,5 @@
 // This chapter is dedicated to some collections: vectors, strings and hash maps
 
-use std::collections::{HashMap, HashSet};
-
 // VECTORS
 // ================================================================================================
 
@@ -10,7 +8,27 @@ use std::collections::{HashMap, HashSet};
 // element in the array. If the array has fewer than 2 elements, return `None`.
 
 pub fn second_largest(vec: &[i32]) -> Option<i32> {
-    !unimplemented!()
+    if vec.len() < 2 {
+        return None;
+    }
+
+    let mut largest = i32::MIN;
+    let mut second_largest = i32::MIN;
+
+    for &num in vec {
+        if num > largest {
+            second_largest = largest;
+            largest = num;
+        } else if num > second_largest && num < largest {
+            second_largest = num;
+        }
+    }
+
+    if second_largest == i32::MIN {
+        None
+    } else {
+        Some(second_largest)
+    }
 }
 
 // ----- 2 --------------------------------------
