@@ -83,6 +83,33 @@ impl Company {
 // - `balance(&self) -> u64` which returns the current balance.
 
 // IMPLEMENT HERE:
+pub struct BankAccount {
+    owner: String,
+    balance: u64,
+}
+
+impl BankAccount {
+    pub fn new(owner: String, initial_balance: u64) -> Self {
+        BankAccount { owner, balance: initial_balance }
+    }
+
+    pub fn deposit(&mut self, amount: u64) {
+        self.balance += amount;
+    }
+
+    pub fn withdraw(&mut self, amount: u64) -> bool {
+        if amount <= self.balance {
+            self.balance -= amount;
+            true
+        } else {
+            false
+        }
+    }
+
+    pub fn balance(&self) -> u64 {
+        self.balance
+    }
+}
 
 // ENUMS
 // ================================================================================================
