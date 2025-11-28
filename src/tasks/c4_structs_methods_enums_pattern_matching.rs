@@ -57,6 +57,21 @@ pub fn rectangle_checker() {
 // (excluding taxes).
 
 // IMPLEMENT HERE:
+pub struct Company {
+    name: String,
+    date_of_origin: u32,
+    annual_income: u64,
+}
+
+impl Company {
+    pub fn new(name: String, date_of_origin: u32, annual_income: u64) -> Self {
+        Company { name, date_of_origin, annual_income }
+    }
+
+    pub fn total_income(&self) -> u64 {
+        u64::from(2025 - self.date_of_origin) * self.annual_income
+    }
+}
 
 // ----- 4 --------------------------------------
 // Define a struct BankAccount with `owner: String` and `balance: u64` fields.
