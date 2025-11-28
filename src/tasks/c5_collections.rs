@@ -95,7 +95,30 @@ pub fn reverse_words(sentence: &str) -> String {
 //   "пРеВеД МеДвЕд -> Превед Медвед"
 
 pub fn normalize_and_capitalize(sentence: &str) -> String {
-    !unimplemented!()
+    let trimmed = sentence.trim();
+    let words: Vec<&str> = trimmed.split_whitespace().collect();
+
+    words
+        .iter()
+        .map(|&word| {
+            if word.is_empty() {
+                return String::new();
+            }
+
+            let mut chars: Vec<char> = word.chars().collect();
+
+            if let Some(first) = chars.first_mut() {
+                *first = first.to_uppercase().next().unwrap();
+            }
+
+            for i in 1..chars.len() {
+                chars[i] = chars[i].to_lowercase().next().unwrap();
+            }
+
+            chars.into_iter().collect()
+        })
+        .collect::<Vec<String>>()
+        .join(" ")
 }
 
 // HASH SET
