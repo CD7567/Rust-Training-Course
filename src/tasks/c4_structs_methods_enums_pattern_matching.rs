@@ -172,7 +172,7 @@ impl Operation {
 
 // ----- 7 --------------------------------------
 // Write a enum `WeirdLengthMeasures`, containing `Inch`, `Foot`, `Yard` and `Mile` variants.
-// Implement a `convert_to_human_format(&self) -> f64` method, which returns the length of of the
+// Implement a `convert_to_human_format(&self) -> f64` method, which returns the length of the
 // provided weirdo lengths in meters using pattern matching (with `match`).
 // Use provided values:
 // - Inch -> 0.0254 m
@@ -181,6 +181,23 @@ impl Operation {
 // - Mile -> 1609.344 m
 
 // IMPLEMENT HERE:
+pub enum WeirdLengthMeasures {
+    Inch,
+    Foot,
+    Yard,
+    Mile,
+}
+
+impl WeirdLengthMeasures {
+    pub fn convert_to_human_format(&self) -> f64 {
+        match self {
+            WeirdLengthMeasures::Inch => 0.0254,
+            WeirdLengthMeasures::Foot => 0.3048,
+            WeirdLengthMeasures::Yard => 0.9144,
+            WeirdLengthMeasures::Mile => 1609.344,
+        }
+    }
+}
 
 // ----- 8 --------------------------------------
 // Write a function `fizzbuzz(n: u32) -> Vec<String>` that returns a vector of strings from 1 to n
