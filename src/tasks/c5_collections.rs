@@ -83,7 +83,8 @@ pub fn longest_increasing_subsequence(init_sequence: &[i32]) -> Vec<i32> {
 // sentence but does not reverse the characters inside each word.
 
 pub fn reverse_words(sentence: &str) -> String {
-    !unimplemented!()
+    let words: Vec<&str> = sentence.split_whitespace().collect();
+    words.iter().rev().map(|&s| s).collect::<Vec<&str>>().join(" ")
 }
 
 // ----- 4 --------------------------------------
