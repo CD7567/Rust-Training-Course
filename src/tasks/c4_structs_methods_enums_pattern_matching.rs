@@ -29,15 +29,23 @@ pub fn point_checker() {
 // contain `r2`.
 
 // IMPLEMENT HERE:
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+fn can_hold(r1: &Rectangle, r2: &Rectangle) -> bool {
+    r1.width >= r2.width && r1.height >= r2.height
+}
 
 // uncomment once implemented
-// pub fn rectangle_checker() {
-//     let big = Rectangle { width: 10, height: 8 };
-//     let small = Rectangle { width: 5, height: 4 };
+pub fn rectangle_checker() {
+    let big = Rectangle { width: 10, height: 8 };
+    let small = Rectangle { width: 5, height: 4 };
 
-//     assert!(can_hold(&big, &small));
-//     assert!(!can_hold(&small, &big));
-// }
+    assert!(can_hold(&big, &small));
+    assert!(!can_hold(&small, &big));
+}
 
 // METHODS
 // ================================================================================================
