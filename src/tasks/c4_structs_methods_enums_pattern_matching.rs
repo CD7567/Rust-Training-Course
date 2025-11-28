@@ -120,6 +120,21 @@ impl BankAccount {
 // sequence.
 
 // IMPLEMENT HERE:
+pub enum TrafficLight {
+    Red,
+    Yellow,
+    Green,
+}
+
+impl TrafficLight {
+    pub fn next(&self) -> TrafficLight {
+        match self {
+            TrafficLight::Red => TrafficLight::Green,
+            TrafficLight::Green => TrafficLight::Yellow,
+            TrafficLight::Yellow => TrafficLight::Red,
+        }
+    }
+}
 
 // ----- 6 --------------------------------------
 // Define an enum `Operation` with variants `Add(i32, i32)`, `Subtract(i32, i32)`,
