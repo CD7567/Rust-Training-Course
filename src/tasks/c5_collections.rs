@@ -38,7 +38,41 @@ pub fn second_largest(vec: &[i32]) -> Option<i32> {
 // For the simplicity, assume that there is only one longest increasing subsequence.
 
 pub fn longest_increasing_subsequence(init_sequence: &[i32]) -> Vec<i32> {
-    !unimplemented!()
+    if init_sequence.is_empty() {
+        return Vec::new();
+    }
+
+    let n = init_sequence.len();
+    let mut dp = vec![1; n];
+    let mut prev = vec![None; n];
+
+    for i in 1..n {
+        for j in 0..i {
+            if init_sequence[i] > init_sequence[j] && dp[i] < dp[j] + 1 {
+                dp[i] = dp[j] + 1;
+                prev[i] = Some(j);
+            }
+        }
+    }
+
+    let mut max_length = dp[0];
+    let mut max_index = 0;
+    for i in 1..n {
+        if dp[i] > max_length {
+            max_length = dp[i];
+            max_index = i;
+        }
+    }
+
+    let mut result = Vec::new();
+    let mut current = Some(max_index);
+    while let Some(idx) = current {
+        result.push(init_sequence[idx]);
+        current = prev[idx];
+    }
+    result.reverse();
+
+    result
 }
 
 // STRINGS
