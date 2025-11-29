@@ -132,3 +132,17 @@ pub fn longest_string<'a>(first: &'a str, second: &'a str) -> &'a str {
 // Add the lifetimes where needed.
 
 // IMPLEMENT HERE:
+pub struct Book<'a> {
+    title: &'a str,
+    content: &'a str,
+}
+
+impl<'a> Book<'a> {
+    pub fn new(title: &'a str, content: &'a str) -> Self {
+        Book { title, content }
+    }
+
+    pub fn longest_word(&self) -> Option<&str> {
+        self.content.split_whitespace().max_by_key(|word| word.len())
+    }
+}
