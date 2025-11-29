@@ -1,7 +1,7 @@
 // This chapter is dedicated to the concurrency.
 
-use std::sync::Arc;
 use std::sync::mpsc::{Receiver, Sender};
+use std::sync::{Arc, mpsc};
 use std::thread;
 
 // THREADS & JOIN
@@ -98,7 +98,30 @@ fn factorial(n: u32) -> u32 {
 }
 
 pub fn parallel_factorials(numbers: Vec<u32>) -> Vec<u32> {
-    unimplemented!()
+    let (sender, receiver) = mpsc::channel();
+    let mut handles = vec![];
+
+    for number in numbers {
+        let sender_clone = sender.clone();
+        let handle = thread::spawn(move || {
+            let result = factorial(number);
+            sender_clone.send(result).unwrap();
+        });
+        handles.push(handle);
+    }
+
+    drop(sender);
+
+    let mut results = Vec::new();
+    for received in receiver {
+        results.push(received);
+    }
+
+    for handle in handles {
+        handle.join().unwrap();
+    }
+
+    results
 }
 
 // MUTEX + ARC
