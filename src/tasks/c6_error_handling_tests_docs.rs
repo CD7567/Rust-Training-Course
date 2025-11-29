@@ -17,7 +17,18 @@ pub fn first_char(text: &str) -> Result<char, String> {
 // be parsed (if it is not an integer) return the `Err("Invalid number")` result.
 
 pub fn read_numbers_from_str(line: &str) -> Result<Vec<i32>, String> {
-    !unimplemented!()
+    if line.trim().is_empty() {
+        return Ok(Vec::new());
+    }
+
+    let mut numbers = Vec::new();
+    for part in line.split_whitespace() {
+        match part.parse::<i32>() {
+            Ok(num) => numbers.push(num),
+            Err(_) => return Err("Invalid number".to_string()),
+        }
+    }
+    Ok(numbers)
 }
 
 // OPTION
