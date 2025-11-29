@@ -54,7 +54,9 @@ impl UserProfile {
     }
 
     pub fn get_email_domain(&self) -> Option<String> {
-        !unimplemented!()
+        self.email
+            .as_ref()
+            .and_then(|email| email.split('@').nth(1).map(|domain| domain.to_string()))
     }
 }
 
