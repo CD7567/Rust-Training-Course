@@ -14,9 +14,18 @@ use std::collections::HashMap;
 // If some words have the same frequency, return them in alphabetical order.
 
 pub fn word_frequencies(text: &str) -> Vec<(String, usize)> {
-    !unimplemented!()
-}
+    let mut frequency_map = HashMap::new();
 
+    text.split_whitespace().map(|word| word.to_lowercase()).for_each(|word| {
+        *frequency_map.entry(word).or_insert(0) += 1;
+    });
+
+    let mut result: Vec<(String, usize)> = frequency_map.into_iter().collect();
+
+    result.sort_by(|a, b| b.1.cmp(&a.1).then(a.0.cmp(&b.0)));
+
+    result
+}
 // ----- 2 --------------------------------------
 // Write a function `top_k_most_common_letters(text: &str, k: usize) -> Vec<(char, usize)>` that:
 // - Counts the frequency of letters only (ignore spaces/punctuation).
