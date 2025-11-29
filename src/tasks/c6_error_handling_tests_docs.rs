@@ -183,14 +183,35 @@ mod prime_tests {
 // - Additionally white the usage example for the `TemperatureLog` in the high-level docs.
 // - For the `average` method additionally write an example of its usage.
 
+/// A struct for tracking temperature readings for a specific city.
+///
+/// # Examples
+///
+/// ```
+/// use TemperatureLog;
+///
+/// let mut log = TemperatureLog::new("Moscow");
+/// log.add_reading(25.5);
+/// log.add_reading(26.0);
+/// log.add_reading(25.0);
+///
+/// assert_eq!(log.average(), Some(25.5));
+/// ```
 #[allow(dead_code)]
 pub struct TemperatureLog {
+    /// The name of the city for which temperatures are being recorded
     pub city: String,
+    /// A collection of temperature readings in degrees Celsius
     pub readings: Vec<f64>,
 }
 
 #[allow(dead_code)]
 impl TemperatureLog {
+    /// Creates a new TemperatureLog for the specified city
+    ///
+    /// # Arguments
+    ///
+    /// * `city` - The name of the city for temperature tracking
     pub fn new(city: &str) -> Self {
         Self {
             city: city.to_string(),
@@ -198,10 +219,33 @@ impl TemperatureLog {
         }
     }
 
+    /// Adds a new temperature reading to the log
+    ///
+    /// # Arguments
+    ///
+    /// * `value` - The temperature value in degrees Celsius to add to the log
     pub fn add_reading(&mut self, value: f64) {
         self.readings.push(value);
     }
 
+    /// Calculates the average temperature from all recorded readings
+    ///
+    /// Returns `Some(average)` if there are readings, or `None` if the log is empty
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use TemperatureLog;
+    ///
+    /// let mut log = TemperatureLog::new("St. Petersburg");
+    /// assert_eq!(log.average(), None);
+    ///
+    /// log.add_reading(18.5);
+    /// log.add_reading(19.0);
+    /// log.add_reading(19.5);
+    ///
+    /// assert_eq!(log.average(), Some(19.0));
+    /// ```
     pub fn average(&self) -> Option<f64> {
         if self.readings.is_empty() {
             return None;
