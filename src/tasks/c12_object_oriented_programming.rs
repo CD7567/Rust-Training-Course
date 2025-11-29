@@ -247,9 +247,37 @@ pub fn demonstrate_cringify() {
 // `String` default type. This trait should have a `convert` method which takes a value of type
 // `Input` and returns a value of type `Output`.
 //
-// Implement `Converter` for two stucts:
+// Implement `Converter` for two structs:
 // - `StringToIntConverter`: converts the provided String to `i32`.
 // - `IntToHexConverter`: converts the provided `i32` into the String holding its hex
 //   representation.
 
 // IMPLEMENT HERE:
+pub trait Converter {
+    type Input = String;
+    type Output;
+
+    fn convert(value: Self::Input) -> Self::Output;
+}
+
+pub struct StringToIntConverter;
+
+impl Converter for StringToIntConverter {
+    type Input = String;
+    type Output = i32;
+
+    fn convert(value: Self::Input) -> Self::Output {
+        value.parse().unwrap_or(0)
+    }
+}
+
+pub struct IntToHexConverter;
+
+impl Converter for IntToHexConverter {
+    type Input = i32;
+    type Output = String;
+
+    fn convert(value: Self::Input) -> Self::Output {
+        format!("{:X}", value)
+    }
+}
