@@ -1,7 +1,7 @@
 // This chapter is dedicated to the concurrency.
 
 use std::sync::mpsc::{Receiver, Sender};
-use std::sync::{Arc, mpsc};
+use std::sync::{Arc, Mutex, mpsc};
 use std::thread;
 
 // THREADS & JOIN
@@ -138,20 +138,24 @@ pub fn parallel_factorials(numbers: Vec<u32>) -> Vec<u32> {
 
 #[derive(Clone)]
 pub struct SharedCounter {
-    value: i32,
+    value: Arc<Mutex<i32>>,
 }
 
 impl SharedCounter {
     pub fn new(initial_value: i32) -> Self {
-        unimplemented!()
+        SharedCounter {
+            value: Arc::new(Mutex::new(initial_value)),
+        }
     }
 
     pub fn increment(&self) {
-        unimplemented!()
+        let mut value = self.value.lock().unwrap();
+        *value += 1;
     }
 
     pub fn get_value(&self) -> i32 {
-        unimplemented!()
+        let value = self.value.lock().unwrap();
+        *value
     }
 }
 
