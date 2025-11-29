@@ -1,7 +1,6 @@
 // This chapter is dedicated to the concurrency.
 
-use std::sync::mpsc::{Receiver, SendError, Sender};
-use std::sync::{Arc, Mutex, mpsc};
+use std::sync::mpsc::{Receiver, Sender};
 use std::thread;
 
 // THREADS & JOIN
@@ -11,7 +10,19 @@ use std::thread;
 // Spawn multiple threads to calculate squares of the provided numbers and collect the results.
 
 pub fn calculate_squares(input_numbers: Vec<i32>) -> Vec<i32> {
-    unimplemented!()
+    let mut handles = vec![];
+
+    for number in input_numbers {
+        let handle = thread::spawn(move || number * number);
+        handles.push(handle);
+    }
+
+    let mut results = Vec::with_capacity(handles.len());
+    for handle in handles {
+        results.push(handle.join().unwrap());
+    }
+
+    results
 }
 
 // ----- 2 --------------------------------------
