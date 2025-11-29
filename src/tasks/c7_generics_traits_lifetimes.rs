@@ -35,6 +35,26 @@ impl<T: PartialOrd> Pair<T> {
 // Implement it for a `Rectangle` struct with fields `width` and `height`.
 
 // IMPLEMENT HERE:
+pub trait Area {
+    fn area(&self) -> f64;
+}
+
+pub struct Rectangle {
+    width: f64,
+    height: f64,
+}
+
+impl Rectangle {
+    pub fn new(width: f64, height: f64) -> Self {
+        Self { width, height }
+    }
+}
+
+impl Area for Rectangle {
+    fn area(&self) -> f64 {
+        self.width * self.height
+    }
+}
 
 // ----- 3 --------------------------------------
 // Define a trait `Summarize` with method `summary(&self) -> String`.
