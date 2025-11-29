@@ -79,5 +79,15 @@ pub fn filter_and_sort_names(names: Vec<String>, minimum_length: usize) -> Vec<S
 // - Returns the grouped map, sorted internally by student names.
 
 pub fn group_students_by_grade(students: Vec<(String, u32)>) -> HashMap<u32, Vec<String>> {
-    !unimplemented!()
+    let mut grouped: HashMap<u32, Vec<String>> = HashMap::new();
+
+    students.into_iter().for_each(|(name, grade)| {
+        grouped.entry(grade).or_insert_with(Vec::new).push(name);
+    });
+
+    grouped.values_mut().for_each(|names| {
+        names.sort_by(|a, b| a.to_lowercase().cmp(&b.to_lowercase()));
+    });
+
+    grouped
 }
