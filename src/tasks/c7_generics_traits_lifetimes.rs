@@ -8,6 +8,24 @@
 // Add a method `max(&self) -> &T` that returns the larger value.
 
 // IMPLEMENT HERE:
+pub struct Pair<T> {
+    first: T,
+    second: T,
+}
+
+impl<T: PartialOrd> Pair<T> {
+    pub fn new(first: T, second: T) -> Self {
+        Pair { first, second }
+    }
+
+    pub fn max(&self) -> &T {
+        if self.first > self.second {
+            &self.first
+        } else {
+            &self.second
+        }
+    }
+}
 
 // TRAITS AND TRAIT BOUNDS
 // ================================================================================================
