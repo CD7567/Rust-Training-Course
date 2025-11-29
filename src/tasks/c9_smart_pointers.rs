@@ -17,6 +17,7 @@
 //
 // Use `Box` if needed
 
+use std::cell::RefCell;
 use std::rc::Rc;
 
 // IMPLEMENT HERE:
@@ -149,19 +150,20 @@ fn test_list_dependencies() {
 
 // IMPLEMENT HERE:
 pub struct SharedCounter {
-    value: i32,
+    value: RefCell<i32>,
 }
 
 impl SharedCounter {
     pub fn new() -> Self {
-        !unimplemented!()
+        SharedCounter { value: RefCell::new(0) }
     }
 
     pub fn increment(&self) {
-        !unimplemented!()
+        let mut value_ref = self.value.borrow_mut();
+        *value_ref += 1;
     }
 
     pub fn get(&self) -> i32 {
-        !unimplemented!()
+        *self.value.borrow()
     }
 }
