@@ -35,7 +35,20 @@ pub fn word_frequencies(text: &str) -> Vec<(String, usize)> {
 // If some letters have the same frequency, return them in alphabetical order.
 
 pub fn top_k_most_common_letters(text: &str, k: usize) -> Vec<(char, usize)> {
-    !unimplemented!()
+    let mut frequency_map = HashMap::new();
+
+    text.chars()
+        .filter(|c| c.is_alphabetic())
+        .map(|c| c.to_ascii_lowercase())
+        .for_each(|c| {
+            *frequency_map.entry(c).or_insert(0) += 1;
+        });
+
+    let mut result: Vec<(char, usize)> = frequency_map.into_iter().collect();
+
+    result.sort_by(|a, b| b.1.cmp(&a.1).then(a.0.cmp(&b.0)));
+
+    result.into_iter().take(k).collect()
 }
 
 // CLOSURES
