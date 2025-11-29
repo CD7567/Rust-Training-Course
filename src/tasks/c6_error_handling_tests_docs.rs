@@ -76,6 +76,30 @@ fn factorial(n: u32) -> u64 {
 #[cfg(test)]
 mod factorial_tests {
     // IMPLEMENT HERE:
+    use super::factorial;
+
+    #[test]
+    fn test_factorial_zero() {
+        assert_eq!(factorial(0), 1);
+    }
+
+    #[test]
+    fn test_factorial_one() {
+        assert_eq!(factorial(1), 1);
+    }
+
+    #[test]
+    fn test_factorial_small_numbers() {
+        assert_eq!(factorial(2), 2);
+        assert_eq!(factorial(3), 6);
+        assert_eq!(factorial(4), 24);
+        assert_eq!(factorial(5), 120);
+    }
+
+    #[test]
+    fn test_factorial_medium_number() {
+        assert_eq!(factorial(10), 3628800);
+    }
 }
 
 // ----- 5 --------------------------------------
