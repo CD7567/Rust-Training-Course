@@ -29,6 +29,8 @@
 // White a small example function which creates a zoo, adds your animals there and calls the
 // `make_all_noises`, `move_all` and `positions` Zoo methods to show that they're working correctly.
 
+use std::fmt;
+
 trait Animal {
     fn name(&self) -> &str;
     fn make_noise(&self) -> String;
@@ -200,6 +202,42 @@ pub fn demonstrate_zoo() {
 // Notice that you also should decide how to display the account.
 
 // IMPLEMENT HERE:
+trait BackTo2007: fmt::Display {
+    fn cringify(&self) -> String {
+        format!("★彡Xx_{}_xX彡★", self.to_string())
+    }
+}
+
+struct Account {
+    name: String,
+    year_of_birth: u32,
+}
+
+impl Account {
+    fn new(name: String, year_of_birth: u32) -> Self {
+        Account { name, year_of_birth }
+    }
+}
+
+impl fmt::Display for Account {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}{}", self.name, self.year_of_birth)
+    }
+}
+
+impl BackTo2007 for Account {}
+
+pub fn demonstrate_cringify() {
+    println!("\n=== Cringify Demonstration ===");
+
+    let account = Account::new("NAGIBATOR".to_string(), 1999);
+    println!("Normal display: {}", account);
+    println!("Cringified: {}", account.cringify());
+
+    let account2 = Account::new("xX_DARK_SHADOW_Xx".to_string(), 2001);
+    println!("Normal display: {}", account2);
+    println!("Cringified: {}", account2.cringify());
+}
 
 // DEFAULT GENERIC TYPE PARAMETERS AND ASSOCIATED TYPES
 // ================================================================================================
