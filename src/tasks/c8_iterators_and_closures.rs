@@ -63,7 +63,12 @@ pub fn top_k_most_common_letters(text: &str, k: usize) -> Vec<(char, usize)> {
 // You must use closures in filtering and sorting.
 
 pub fn filter_and_sort_names(names: Vec<String>, minimum_length: usize) -> Vec<String> {
-    !unimplemented!()
+    let mut filtered_names: Vec<String> =
+        names.into_iter().filter(|name| name.len() >= minimum_length).collect();
+
+    filtered_names.sort_by(|a, b| a.to_lowercase().cmp(&b.to_lowercase()));
+
+    filtered_names
 }
 
 // ----- 4 --------------------------------------
