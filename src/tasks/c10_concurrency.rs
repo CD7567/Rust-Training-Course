@@ -175,24 +175,34 @@ impl SharedCounter {
 
 #[derive(Clone)]
 pub struct BankAccount {
-    balance: i32,
+    balance: Arc<Mutex<i32>>,
 }
 
 impl BankAccount {
     pub fn new(initial_balance: i32) -> Self {
-        unimplemented!()
+        BankAccount {
+            balance: Arc::new(Mutex::new(initial_balance)),
+        }
     }
 
     pub fn deposit(&self, amount: i32) {
-        unimplemented!()
+        let mut balance = self.balance.lock().unwrap();
+        *balance += amount;
     }
 
     pub fn withdraw(&self, amount: i32) -> bool {
-        unimplemented!()
+        let mut balance = self.balance.lock().unwrap();
+        if *balance >= amount {
+            *balance -= amount;
+            true
+        } else {
+            false
+        }
     }
 
     pub fn get_balance(&self) -> i32 {
-        unimplemented!()
+        let balance = self.balance.lock().unwrap();
+        *balance
     }
 }
 
