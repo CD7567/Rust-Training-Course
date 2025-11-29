@@ -1,8 +1,5 @@
 // This chapter is dedicated to the smart pointers: Box, Rc and RefCell.
 
-use std::cell::RefCell;
-use std::rc::Rc;
-
 // Box
 // ================================================================================================
 
@@ -21,6 +18,39 @@ use std::rc::Rc;
 // Use `Box` if needed
 
 // IMPLEMENT HERE:
+pub struct BinaryTreeNode {
+    value: i32,
+    left_child: Option<Box<BinaryTreeNode>>,
+    right_child: Option<Box<BinaryTreeNode>>,
+}
+
+impl BinaryTreeNode {
+    pub fn new(value: i32) -> Self {
+        BinaryTreeNode {
+            value,
+            left_child: None,
+            right_child: None,
+        }
+    }
+
+    pub fn with_children(
+        value: i32,
+        left_child: BinaryTreeNode,
+        right_child: BinaryTreeNode,
+    ) -> Self {
+        BinaryTreeNode {
+            value,
+            left_child: Some(Box::new(left_child)),
+            right_child: Some(Box::new(right_child)),
+        }
+    }
+
+    pub fn sum(&self) -> i32 {
+        let left_sum = self.left_child.as_ref().map_or(0, |node| node.sum());
+        let right_sum = self.right_child.as_ref().map_or(0, |node| node.sum());
+        self.value + left_sum + right_sum
+    }
+}
 
 // Rc
 // ================================================================================================
