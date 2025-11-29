@@ -66,6 +66,48 @@ impl Area for Rectangle {
 // formatted notification string using a `summary` method.
 
 // IMPLEMENT HERE:
+pub trait Summarize {
+    fn summary(&self) -> String;
+}
+
+pub struct Article {
+    title: String,
+    author: String,
+    content: String,
+}
+
+impl Article {
+    pub fn new(title: String, author: String, content: String) -> Self {
+        Self { title, author, content }
+    }
+}
+
+impl Summarize for Article {
+    fn summary(&self) -> String {
+        format!("{} by {}", self.title, self.author)
+    }
+}
+
+pub struct Tweet {
+    username: String,
+    content: String,
+}
+
+impl Tweet {
+    pub fn new(username: String, content: String) -> Self {
+        Self { username, content }
+    }
+}
+
+impl Summarize for Tweet {
+    fn summary(&self) -> String {
+        format!("@{}: {}", self.username, self.content)
+    }
+}
+
+pub fn notify<T: Summarize>(item: &T) -> String {
+    format!("Breaking news: {}", item.summary())
+}
 
 // LIFETIMES
 // ================================================================================================
