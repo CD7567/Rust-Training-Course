@@ -1,5 +1,6 @@
 // This chapter is dedicated to the concurrency.
 
+use std::sync::Arc;
 use std::sync::mpsc::{Receiver, Sender};
 use std::thread;
 
@@ -49,7 +50,37 @@ fn is_prime(number: u64) -> bool {
 /// - `Vec<(u64, bool)>` is a vector of the provided values along with the boolean flag whether this
 ///   value is prime.
 pub fn parallel_prime_check(numbers: Vec<u64>, number_of_threads: usize) -> Vec<(u64, bool)> {
-    unimplemented!()
+    if numbers.is_empty() {
+        return Vec::new();
+    }
+
+    let chunk_size = (numbers.len() + number_of_threads - 1) / number_of_threads;
+    let numbers_arc = Arc::new(numbers);
+    let mut handles = vec![];
+
+    for i in 0..number_of_threads {
+        let numbers_ref = Arc::clone(&numbers_arc);
+        let handle = thread::spawn(move || {
+            let start = i * chunk_size;
+            let end = std::cmp::min(start + chunk_size, numbers_ref.len());
+
+            let mut results = Vec::new();
+            for j in start..end {
+                let number = numbers_ref[j];
+                results.push((number, is_prime(number)));
+            }
+            results
+        });
+        handles.push(handle);
+    }
+
+    let mut all_results = Vec::new();
+    for handle in handles {
+        let thread_results = handle.join().unwrap();
+        all_results.extend(thread_results);
+    }
+
+    all_results
 }
 
 // MPSC CHANNELS
