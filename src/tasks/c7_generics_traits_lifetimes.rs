@@ -117,8 +117,8 @@ pub fn notify<T: Summarize>(item: &T) -> String {
 // two string slices. Add the lifetimes where needed.
 
 // IMPLEMENT HERE:
-pub fn longest_string() {
-    !unimplemented!()
+pub fn longest_string<'a>(first: &'a str, second: &'a str) -> &'a str {
+    if first.len() > second.len() { first } else { second }
 }
 
 // ----- 5 --------------------------------------
