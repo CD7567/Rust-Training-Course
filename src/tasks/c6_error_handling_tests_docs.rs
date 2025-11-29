@@ -121,6 +121,49 @@ fn is_prime(number: u64) -> bool {
 #[cfg(test)]
 mod prime_tests {
     // IMPLEMENT HERE:
+    use super::is_prime;
+
+    #[test]
+    fn test_non_prime_by_def() {
+        assert!(!is_prime(0));
+        assert!(!is_prime(1));
+    }
+
+    #[test]
+    fn test_non_prime_powers() {
+        assert!(!is_prime(4));
+        assert!(!is_prime(8));
+        assert!(!is_prime(9));
+        assert!(!is_prime(27));
+    }
+
+    #[test]
+    fn test_non_prime_composite() {
+        assert!(!is_prime(91)); // 7 * 13
+        assert!(!is_prime(95)); // 5 * 19
+        assert!(!is_prime(715)); // 5 * 11 * 13
+    }
+
+    #[test]
+    fn test_prime_numbers() {
+        assert!(is_prime(2));
+        assert!(is_prime(3));
+        assert!(is_prime(5));
+        assert!(is_prime(7));
+        assert!(is_prime(11));
+        assert!(is_prime(13));
+        assert!(is_prime(17));
+        assert!(is_prime(19));
+        assert!(is_prime(23));
+        assert!(is_prime(29));
+    }
+
+    #[test]
+    fn test_larger_prime_numbers() {
+        assert!(is_prime(97));
+        assert!(is_prime(101));
+        assert!(is_prime(113));
+    }
 }
 
 // WRITING DOCS
