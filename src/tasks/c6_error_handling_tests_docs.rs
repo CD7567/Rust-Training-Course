@@ -8,7 +8,7 @@
 // character of a string or an error message "Empty string" if the string is empty.
 
 pub fn first_char(text: &str) -> Result<char, String> {
-    !unimplemented!()
+    text.chars().next().ok_or_else(|| "Empty string".to_string())
 }
 
 // ----- 2 --------------------------------------
