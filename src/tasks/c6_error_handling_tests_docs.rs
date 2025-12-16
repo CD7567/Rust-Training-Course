@@ -8,7 +8,7 @@
 // character of a string or an error message "Empty string" if the string is empty.
 
 pub fn first_char(text: &str) -> Result<char, String> {
-    !unimplemented!()
+    text.chars().next().ok_or_else(|| "Empty string".to_string())
 }
 
 // ----- 2 --------------------------------------
@@ -17,7 +17,18 @@ pub fn first_char(text: &str) -> Result<char, String> {
 // be parsed (if it is not an integer) return the `Err("Invalid number")` result.
 
 pub fn read_numbers_from_str(line: &str) -> Result<Vec<i32>, String> {
-    !unimplemented!()
+    if line.trim().is_empty() {
+        return Ok(Vec::new());
+    }
+
+    let mut numbers = Vec::new();
+    for part in line.split_whitespace() {
+        match part.parse::<i32>() {
+            Ok(num) => numbers.push(num),
+            Err(_) => return Err("Invalid number".to_string()),
+        }
+    }
+    Ok(numbers)
 }
 
 // OPTION
@@ -43,7 +54,9 @@ impl UserProfile {
     }
 
     pub fn get_email_domain(&self) -> Option<String> {
-        !unimplemented!()
+        self.email
+            .as_ref()
+            .and_then(|email| email.split('@').nth(1).map(|domain| domain.to_string()))
     }
 }
 
@@ -63,6 +76,30 @@ fn factorial(n: u32) -> u64 {
 #[cfg(test)]
 mod factorial_tests {
     // IMPLEMENT HERE:
+    use super::factorial;
+
+    #[test]
+    fn test_factorial_zero() {
+        assert_eq!(factorial(0), 1);
+    }
+
+    #[test]
+    fn test_factorial_one() {
+        assert_eq!(factorial(1), 1);
+    }
+
+    #[test]
+    fn test_factorial_small_numbers() {
+        assert_eq!(factorial(2), 2);
+        assert_eq!(factorial(3), 6);
+        assert_eq!(factorial(4), 24);
+        assert_eq!(factorial(5), 120);
+    }
+
+    #[test]
+    fn test_factorial_medium_number() {
+        assert_eq!(factorial(10), 3628800);
+    }
 }
 
 // ----- 5 --------------------------------------
@@ -84,6 +121,49 @@ fn is_prime(number: u64) -> bool {
 #[cfg(test)]
 mod prime_tests {
     // IMPLEMENT HERE:
+    use super::is_prime;
+
+    #[test]
+    fn test_non_prime_by_def() {
+        assert!(!is_prime(0));
+        assert!(!is_prime(1));
+    }
+
+    #[test]
+    fn test_non_prime_powers() {
+        assert!(!is_prime(4));
+        assert!(!is_prime(8));
+        assert!(!is_prime(9));
+        assert!(!is_prime(27));
+    }
+
+    #[test]
+    fn test_non_prime_composite() {
+        assert!(!is_prime(91)); // 7 * 13
+        assert!(!is_prime(95)); // 5 * 19
+        assert!(!is_prime(715)); // 5 * 11 * 13
+    }
+
+    #[test]
+    fn test_prime_numbers() {
+        assert!(is_prime(2));
+        assert!(is_prime(3));
+        assert!(is_prime(5));
+        assert!(is_prime(7));
+        assert!(is_prime(11));
+        assert!(is_prime(13));
+        assert!(is_prime(17));
+        assert!(is_prime(19));
+        assert!(is_prime(23));
+        assert!(is_prime(29));
+    }
+
+    #[test]
+    fn test_larger_prime_numbers() {
+        assert!(is_prime(97));
+        assert!(is_prime(101));
+        assert!(is_prime(113));
+    }
 }
 
 // WRITING DOCS
@@ -103,14 +183,35 @@ mod prime_tests {
 // - Additionally white the usage example for the `TemperatureLog` in the high-level docs.
 // - For the `average` method additionally write an example of its usage.
 
+/// A struct for tracking temperature readings for a specific city.
+///
+/// # Examples
+///
+/// ```
+/// use TemperatureLog;
+///
+/// let mut log = TemperatureLog::new("Moscow");
+/// log.add_reading(25.5);
+/// log.add_reading(26.0);
+/// log.add_reading(25.0);
+///
+/// assert_eq!(log.average(), Some(25.5));
+/// ```
 #[allow(dead_code)]
 pub struct TemperatureLog {
+    /// The name of the city for which temperatures are being recorded
     pub city: String,
+    /// A collection of temperature readings in degrees Celsius
     pub readings: Vec<f64>,
 }
 
 #[allow(dead_code)]
 impl TemperatureLog {
+    /// Creates a new TemperatureLog for the specified city
+    ///
+    /// # Arguments
+    ///
+    /// * `city` - The name of the city for temperature tracking
     pub fn new(city: &str) -> Self {
         Self {
             city: city.to_string(),
@@ -118,10 +219,33 @@ impl TemperatureLog {
         }
     }
 
+    /// Adds a new temperature reading to the log
+    ///
+    /// # Arguments
+    ///
+    /// * `value` - The temperature value in degrees Celsius to add to the log
     pub fn add_reading(&mut self, value: f64) {
         self.readings.push(value);
     }
 
+    /// Calculates the average temperature from all recorded readings
+    ///
+    /// Returns `Some(average)` if there are readings, or `None` if the log is empty
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use TemperatureLog;
+    ///
+    /// let mut log = TemperatureLog::new("St. Petersburg");
+    /// assert_eq!(log.average(), None);
+    ///
+    /// log.add_reading(18.5);
+    /// log.add_reading(19.0);
+    /// log.add_reading(19.5);
+    ///
+    /// assert_eq!(log.average(), Some(19.0));
+    /// ```
     pub fn average(&self) -> Option<f64> {
         if self.readings.is_empty() {
             return None;
