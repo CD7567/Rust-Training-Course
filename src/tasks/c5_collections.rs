@@ -10,7 +10,27 @@ use std::collections::{HashMap, HashSet};
 // element in the array. If the array has fewer than 2 elements, return `None`.
 
 pub fn second_largest(vec: &[i32]) -> Option<i32> {
-    !unimplemented!()
+    if vec.len() < 2 {
+        return None;
+    }
+
+    let mut largest = i32::MIN;
+    let mut second_largest = i32::MIN;
+
+    for &num in vec {
+        if num > largest {
+            second_largest = largest;
+            largest = num;
+        } else if num > second_largest && num < largest {
+            second_largest = num;
+        }
+    }
+
+    if second_largest == i32::MIN {
+        None
+    } else {
+        Some(second_largest)
+    }
 }
 
 // ----- 2 --------------------------------------
@@ -20,7 +40,41 @@ pub fn second_largest(vec: &[i32]) -> Option<i32> {
 // For the simplicity, assume that there is only one longest increasing subsequence.
 
 pub fn longest_increasing_subsequence(init_sequence: &[i32]) -> Vec<i32> {
-    !unimplemented!()
+    if init_sequence.is_empty() {
+        return Vec::new();
+    }
+
+    let n = init_sequence.len();
+    let mut dp = vec![1; n];
+    let mut prev = vec![None; n];
+
+    for i in 1..n {
+        for j in 0..i {
+            if init_sequence[i] > init_sequence[j] && dp[i] < dp[j] + 1 {
+                dp[i] = dp[j] + 1;
+                prev[i] = Some(j);
+            }
+        }
+    }
+
+    let mut max_length = dp[0];
+    let mut max_index = 0;
+    for i in 1..n {
+        if dp[i] > max_length {
+            max_length = dp[i];
+            max_index = i;
+        }
+    }
+
+    let mut result = Vec::new();
+    let mut current = Some(max_index);
+    while let Some(idx) = current {
+        result.push(init_sequence[idx]);
+        current = prev[idx];
+    }
+    result.reverse();
+
+    result
 }
 
 // STRINGS
@@ -31,7 +85,8 @@ pub fn longest_increasing_subsequence(init_sequence: &[i32]) -> Vec<i32> {
 // sentence but does not reverse the characters inside each word.
 
 pub fn reverse_words(sentence: &str) -> String {
-    !unimplemented!()
+    let words: Vec<&str> = sentence.split_whitespace().collect();
+    words.iter().rev().map(|&s| s).collect::<Vec<&str>>().join(" ")
 }
 
 // ----- 4 --------------------------------------
@@ -42,7 +97,30 @@ pub fn reverse_words(sentence: &str) -> String {
 //   "пРеВеД МеДвЕд -> Превед Медвед"
 
 pub fn normalize_and_capitalize(sentence: &str) -> String {
-    !unimplemented!()
+    let trimmed = sentence.trim();
+    let words: Vec<&str> = trimmed.split_whitespace().collect();
+
+    words
+        .iter()
+        .map(|&word| {
+            if word.is_empty() {
+                return String::new();
+            }
+
+            let mut chars: Vec<char> = word.chars().collect();
+
+            if let Some(first) = chars.first_mut() {
+                *first = first.to_uppercase().next().unwrap();
+            }
+
+            for i in 1..chars.len() {
+                chars[i] = chars[i].to_lowercase().next().unwrap();
+            }
+
+            chars.into_iter().collect()
+        })
+        .collect::<Vec<String>>()
+        .join(" ")
 }
 
 // HASH SET
@@ -53,7 +131,8 @@ pub fn normalize_and_capitalize(sentence: &str) -> String {
 // characters (ignoring case), and false otherwise.
 
 pub fn unique_chars(s: &str) -> bool {
-    !unimplemented!()
+    let hash_set: HashSet<char> = s.chars().map(|c| c.to_lowercase().next().unwrap()).collect();
+    hash_set.len() == s.len()
 }
 
 // HASH MAP
@@ -65,5 +144,14 @@ pub fn unique_chars(s: &str) -> bool {
 // vector, return all of them.
 
 pub fn top_k_frequent(nums: Vec<i32>, k: usize) -> Vec<i32> {
-    !unimplemented!()
+    let mut frequency = HashMap::new();
+    for &num in &nums {
+        *frequency.entry(num).or_insert(0) += 1;
+    }
+
+    let mut freq_vec: Vec<(i32, i32)> = frequency.into_iter().collect();
+
+    freq_vec.sort_by(|a, b| b.1.cmp(&a.1).then(b.0.cmp(&a.0)));
+
+    freq_vec.into_iter().take(k).map(|(num, _)| num).collect()
 }
