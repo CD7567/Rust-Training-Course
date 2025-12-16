@@ -9,9 +9,21 @@
 // can still be used.
 //
 // You can implement the function and use it right inside the `string_ownership` function.
-#[allow(dead_code)]
+
 pub fn string_ownership() {
-    !unimplemented!()
+    fn longest_owned(s1: String, s2: String) -> String {
+        if s1.len() > s2.len() { s1 } else { s2 }
+    }
+
+    let string1 = String::from("hello");
+    let string2 = String::from("world!");
+
+    let result = longest_owned(string1, string2);
+
+    println!("Longest string: {}", result);
+
+    // println!("string1: {}", string1); // ERROR: borrow of moved value
+    // println!("string2: {}", string2); // ERROR: borrow of moved value
 }
 
 // BORROWING
@@ -23,9 +35,16 @@ pub fn string_ownership() {
 // show that it was not moved and still available.
 //
 // You can implement the function and use it right inside the `simple_borrowing` function.
-#[allow(dead_code)]
+
 pub fn simple_borrowing() {
-    !unimplemented!()
+    fn print_length(s: &str) {
+        println!("Length: {}", s.len());
+    }
+
+    let text = "rust is awesome!";
+    print_length(&text);
+
+    println!("Original string: {}", text);
 }
 
 // ----- 3 --------------------------------------
@@ -34,9 +53,23 @@ pub fn simple_borrowing() {
 // to check that the string was borrowed, not moved.
 //
 // You can implement the function and use it right inside the `hard_borrowing` function.
-#[allow(dead_code)]
+
 pub fn hard_borrowing() {
-    !unimplemented!()
+    fn append_and_return_length(string: &mut String, suffix: &str) -> usize {
+        string.push_str(suffix);
+        string.len()
+    }
+
+    let mut text = String::from("hello");
+
+    let len1 = append_and_return_length(&mut text, " world");
+    println!("After first append: '{}', length: {}", text, len1);
+
+    let len2 = append_and_return_length(&mut text, "!");
+    println!("After second append: '{}', length: {}", text, len2);
+
+    let len3 = append_and_return_length(&mut text, " 🦀");
+    println!("After third append: '{}', length: {}", text, len3);
 }
 
 // SLICES
@@ -45,13 +78,21 @@ pub fn hard_borrowing() {
 // ----- 4 --------------------------------------
 // Write a function last_word(s: &str) -> &str that returns the last word from a string slice.
 // Assume words are separated by spaces.
+
 pub fn last_word(slice: &str) -> &str {
-    !unimplemented!()
+    slice.split_whitespace().last().unwrap_or("")
 }
 
 // ----- 5 --------------------------------------
 // Write a function longest_word(sentence: &str) -> &str that returns the longest word in a
 // sentence (string slice). If several words have the same maximum length, return the last one.
+
 pub fn longest_word(sentence: &str) -> &str {
-    !unimplemented!()
+    sentence.split_whitespace().fold("", |longest, current| {
+        if current.len() >= longest.len() {
+            current
+        } else {
+            longest
+        }
+    })
 }
