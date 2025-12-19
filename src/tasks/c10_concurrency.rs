@@ -1,6 +1,6 @@
 // This chapter is dedicated to the concurrency.
 
-use std::sync::mpsc::{Receiver, SendError, Sender};
+use std::sync::mpsc::{Receiver, Sender};
 use std::sync::{Arc, Mutex, mpsc};
 use std::thread;
 
@@ -11,7 +11,19 @@ use std::thread;
 // Spawn multiple threads to calculate squares of the provided numbers and collect the results.
 
 pub fn calculate_squares(input_numbers: Vec<i32>) -> Vec<i32> {
-    unimplemented!()
+    let mut handles = vec![];
+
+    for number in input_numbers {
+        let handle = thread::spawn(move || number * number);
+        handles.push(handle);
+    }
+
+    let mut results = Vec::with_capacity(handles.len());
+    for handle in handles {
+        results.push(handle.join().unwrap());
+    }
+
+    results
 }
 
 // ----- 2 --------------------------------------
@@ -38,7 +50,37 @@ fn is_prime(number: u64) -> bool {
 /// - `Vec<(u64, bool)>` is a vector of the provided values along with the boolean flag whether this
 ///   value is prime.
 pub fn parallel_prime_check(numbers: Vec<u64>, number_of_threads: usize) -> Vec<(u64, bool)> {
-    unimplemented!()
+    if numbers.is_empty() {
+        return Vec::new();
+    }
+
+    let chunk_size = (numbers.len() + number_of_threads - 1) / number_of_threads;
+    let numbers_arc = Arc::new(numbers);
+    let mut handles = vec![];
+
+    for i in 0..number_of_threads {
+        let numbers_ref = Arc::clone(&numbers_arc);
+        let handle = thread::spawn(move || {
+            let start = i * chunk_size;
+            let end = std::cmp::min(start + chunk_size, numbers_ref.len());
+
+            let mut results = Vec::new();
+            for j in start..end {
+                let number = numbers_ref[j];
+                results.push((number, is_prime(number)));
+            }
+            results
+        });
+        handles.push(handle);
+    }
+
+    let mut all_results = Vec::new();
+    for handle in handles {
+        let thread_results = handle.join().unwrap();
+        all_results.extend(thread_results);
+    }
+
+    all_results
 }
 
 // MPSC CHANNELS
@@ -56,7 +98,30 @@ fn factorial(n: u32) -> u32 {
 }
 
 pub fn parallel_factorials(numbers: Vec<u32>) -> Vec<u32> {
-    unimplemented!()
+    let (sender, receiver) = mpsc::channel();
+    let mut handles = vec![];
+
+    for number in numbers {
+        let sender_clone = sender.clone();
+        let handle = thread::spawn(move || {
+            let result = factorial(number);
+            sender_clone.send(result).unwrap();
+        });
+        handles.push(handle);
+    }
+
+    drop(sender);
+
+    let mut results = Vec::new();
+    for received in receiver {
+        results.push(received);
+    }
+
+    for handle in handles {
+        handle.join().unwrap();
+    }
+
+    results
 }
 
 // MUTEX + ARC
@@ -73,20 +138,24 @@ pub fn parallel_factorials(numbers: Vec<u32>) -> Vec<u32> {
 
 #[derive(Clone)]
 pub struct SharedCounter {
-    value: i32,
+    value: Arc<Mutex<i32>>,
 }
 
 impl SharedCounter {
     pub fn new(initial_value: i32) -> Self {
-        unimplemented!()
+        SharedCounter {
+            value: Arc::new(Mutex::new(initial_value)),
+        }
     }
 
     pub fn increment(&self) {
-        unimplemented!()
+        let mut value = self.value.lock().unwrap();
+        *value += 1;
     }
 
     pub fn get_value(&self) -> i32 {
-        unimplemented!()
+        let value = self.value.lock().unwrap();
+        *value
     }
 }
 
@@ -106,24 +175,34 @@ impl SharedCounter {
 
 #[derive(Clone)]
 pub struct BankAccount {
-    balance: i32,
+    balance: Arc<Mutex<i32>>,
 }
 
 impl BankAccount {
     pub fn new(initial_balance: i32) -> Self {
-        unimplemented!()
+        BankAccount {
+            balance: Arc::new(Mutex::new(initial_balance)),
+        }
     }
 
     pub fn deposit(&self, amount: i32) {
-        unimplemented!()
+        let mut balance = self.balance.lock().unwrap();
+        *balance += amount;
     }
 
     pub fn withdraw(&self, amount: i32) -> bool {
-        unimplemented!()
+        let mut balance = self.balance.lock().unwrap();
+        if *balance >= amount {
+            *balance -= amount;
+            true
+        } else {
+            false
+        }
     }
 
     pub fn get_balance(&self) -> i32 {
-        unimplemented!()
+        let balance = self.balance.lock().unwrap();
+        *balance
     }
 }
 
@@ -156,10 +235,57 @@ impl BankAccount {
 //   - Send each task from the input list into the task_sender.
 //   - Collect all results from the result_receiver into a vector and return it.
 
-fn worker(worker_id: usize, task_receiver: Receiver<i32>, result_sender: Sender<(usize, i32)>) {
-    unimplemented!()
+fn worker(
+    worker_id: usize,
+    task_receiver: Arc<Mutex<Receiver<i32>>>,
+    result_sender: Sender<(usize, i32)>,
+) {
+    loop {
+        let task = {
+            let receiver_guard = task_receiver.lock().unwrap();
+            match receiver_guard.recv() {
+                Ok(task) => task,
+                Err(_) => break,
+            }
+        };
+
+        let result = task * task;
+        result_sender.send((worker_id, result)).unwrap();
+    }
 }
 
 pub fn run_work_queue(tasks: Vec<i32>, number_of_workers: usize) -> Vec<(usize, i32)> {
-    unimplemented!()
+    let (task_sender, task_receiver) = mpsc::channel();
+    let (result_sender, result_receiver) = mpsc::channel();
+
+    let task_receiver_arc = Arc::new(Mutex::new(task_receiver));
+    let mut worker_handles = vec![];
+
+    for worker_id in 0..number_of_workers {
+        let task_receiver_clone = Arc::clone(&task_receiver_arc);
+        let result_sender_clone = result_sender.clone();
+
+        let handle = thread::spawn(move || {
+            worker(worker_id, task_receiver_clone, result_sender_clone);
+        });
+        worker_handles.push(handle);
+    }
+
+    for task in tasks {
+        task_sender.send(task).unwrap();
+    }
+
+    drop(task_sender);
+    drop(result_sender);
+
+    let mut results = Vec::new();
+    for received in result_receiver {
+        results.push(received);
+    }
+
+    for handle in worker_handles {
+        handle.join().unwrap();
+    }
+
+    results
 }
